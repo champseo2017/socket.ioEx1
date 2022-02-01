@@ -12,9 +12,10 @@
       <h1>Awesome Chat</h1>
     </header>
     <section id="chatroom">
-      <div id="messages">
+      <div id="messages"></div>
+      <div id="send-messages">
         <input id="message" type="text" placeholder="Enter your message here" />
-        <input id="send" type="'button" value="Send" />
+        <button id="send" type="'button">Send</button>
       </div>
     </section>
     <footer>Hope you enjoy your stay here</footer>
@@ -23,13 +24,28 @@
       integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
       crossorigin="anonymous"
     ></script>
-    <!-- <script src="https://cdn.socket.io/4.4.1/socket.io.js"></script>
+    <script src="https://cdn.socket.io/4.4.1/socket.io.js"></script>
     <script>
       var socket = io("http://localhost:3000");
-      socket.on("message-from-server-to-client", (msg) => {
-        document.getElementById("message").innerHTML = msg;
+      $(document).ready(() => {
+        socket.on("message", (data) => {
+          data = JSON.parse(data);
+          console.log("data", data);
+          $("#messages").append(
+            '<div class="' + data.type + '">' + data.message + "</div>"
+          );
+          $(() => {
+            $("#send").click(() => {
+              var data = {
+                message: $("#message").val(),
+                type: "userMessage",
+              };
+              socket.send(JSON.stringify(data));
+              $("#message").val("");
+            });
+          });
+        });
       });
-      socket.emit("message-from-client-to-server", "Hello World 222");
-    </script> -->
+    </script>
   </body>
 </html>

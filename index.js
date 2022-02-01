@@ -1,11 +1,11 @@
 const express = require("express");
 const app = express();
 const path = require("path");
+app.use(express.static(path.join(__dirname, "public")));
 const server = app.listen(
   3000,
   console.log("Socket.io Hello Wolrd server started")
 );
-app.use(express.static(path.join(__dirname, "public")));
 const io = require("socket.io")(server, {
   cors: {
     origin: "http://localhost:3000",
@@ -27,12 +27,12 @@ io.on("connection", (socket) => {
       message: "Welcome to the most interesting chat room on earth!",
     })
   );
-  socket.on('message', (message) => {
+  socket.on("message", (message) => {
     message = JSON.parse(message);
     if (message.type == "userMessage") {
-        socket.broadcast.send(JSON.stringify(message));
-        message.type = "myMessage";
-        socket.send(JSON.stringify(message));
+      socket.broadcast.emit('message', JSON.stringify(message));
+      message.type = "myMessage";
+      socket.send(JSON.stringify(message));
     }
-  })
+  });
 });

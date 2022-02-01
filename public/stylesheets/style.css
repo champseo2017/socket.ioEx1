@@ -67,3 +67,9 @@ footer {
 a {
   color: #00b7ff;
 }
+
+div#send-messages {
+  position: relative;
+  bottom: 2%;
+  padding: 0 10px;
+}
